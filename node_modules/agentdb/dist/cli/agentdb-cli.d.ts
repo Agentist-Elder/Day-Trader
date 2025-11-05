@@ -1,0 +1,154 @@
+#!/usr/bin/env node
+/**
+ * AgentDB CLI - Command-line interface for frontier memory features
+ *
+ * Provides commands for:
+ * - Causal memory graph operations
+ * - Explainable recall with certificates
+ * - Nightly learner automation
+ * - Database management
+ */
+declare class AgentDBCLI {
+    db?: any;
+    private causalGraph?;
+    private causalRecall?;
+    private explainableRecall?;
+    private nightlyLearner?;
+    private reflexion?;
+    private skills?;
+    private embedder?;
+    initialize(dbPath?: string): Promise<void>;
+    causalAddEdge(params: {
+        cause: string;
+        effect: string;
+        uplift: number;
+        confidence?: number;
+        sampleSize?: number;
+    }): Promise<void>;
+    causalExperimentCreate(params: {
+        name: string;
+        cause: string;
+        effect: string;
+    }): Promise<void>;
+    causalExperimentAddObservation(params: {
+        experimentId: number;
+        isTreatment: boolean;
+        outcome: number;
+        context?: string;
+    }): Promise<void>;
+    causalExperimentCalculate(experimentId: number): Promise<void>;
+    causalQuery(params: {
+        cause?: string;
+        effect?: string;
+        minConfidence?: number;
+        minUplift?: number;
+        limit?: number;
+    }): Promise<void>;
+    recallWithCertificate(params: {
+        query: string;
+        k?: number;
+        alpha?: number;
+        beta?: number;
+        gamma?: number;
+    }): Promise<void>;
+    learnerRun(params: {
+        minAttempts?: number;
+        minSuccessRate?: number;
+        minConfidence?: number;
+        dryRun?: boolean;
+    }): Promise<void>;
+    learnerPrune(params: {
+        minConfidence?: number;
+        minUplift?: number;
+        maxAgeDays?: number;
+    }): Promise<void>;
+    reflexionStoreEpisode(params: {
+        sessionId: string;
+        task: string;
+        input?: string;
+        output?: string;
+        critique?: string;
+        reward: number;
+        success: boolean;
+        latencyMs?: number;
+        tokensUsed?: number;
+    }): Promise<void>;
+    reflexionRetrieve(params: {
+        task: string;
+        k?: number;
+        onlyFailures?: boolean;
+        onlySuccesses?: boolean;
+        minReward?: number;
+        synthesizeContext?: boolean;
+        filters?: any;
+    }): Promise<void>;
+    reflexionRetrieveJson(params: {
+        task: string;
+        k?: number;
+        onlyFailures?: boolean;
+        onlySuccesses?: boolean;
+        minReward?: number;
+    }): Promise<any[]>;
+    reflexionGetCritiqueSummary(params: {
+        task: string;
+        k?: number;
+    }): Promise<void>;
+    reflexionPrune(params: {
+        minReward?: number;
+        maxAgeDays?: number;
+        keepMinPerTask?: number;
+    }): Promise<void>;
+    skillCreate(params: {
+        name: string;
+        description: string;
+        code?: string;
+        successRate?: number;
+        episodeId?: number;
+    }): Promise<void>;
+    skillSearch(params: {
+        task: string;
+        k?: number;
+        minSuccessRate?: number;
+    }): Promise<void>;
+    skillConsolidate(params: {
+        minAttempts?: number;
+        minReward?: number;
+        timeWindowDays?: number;
+        extractPatterns?: boolean;
+    }): Promise<void>;
+    skillPrune(params: {
+        minUses?: number;
+        minSuccessRate?: number;
+        maxAgeDays?: number;
+    }): Promise<void>;
+    quicStartServer(params: {
+        port?: number;
+        cert?: string;
+        key?: string;
+        authToken?: string;
+    }): Promise<void>;
+    quicConnect(params: {
+        host: string;
+        port: number;
+        authToken?: string;
+        cert?: string;
+    }): Promise<void>;
+    quicPush(params: {
+        server: string;
+        incremental?: boolean;
+        filter?: string;
+    }): Promise<void>;
+    quicPull(params: {
+        server: string;
+        incremental?: boolean;
+        filter?: string;
+    }): Promise<void>;
+    quicStatus(): Promise<void>;
+    private generateAuthToken;
+    private getPendingChanges;
+    private getSyncMetadata;
+    private timeAgo;
+    dbStats(): Promise<void>;
+}
+export { AgentDBCLI };
+//# sourceMappingURL=agentdb-cli.d.ts.map

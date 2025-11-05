@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # Neural Trading System Application
+  neural-trading:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: neural-trading-app
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      # Mount logs directory (optional)
+      - ./logs:/app/logs
+      # Mount data directory for persistent storage (optional)
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - trading-network
+    labels:
+      - "com.neural-trading.description=Neural Trading System with GOAP, SAFLA, and AgentDB"
+      - "com.neural-trading.version=0.1.0"
+
+  # Optional: Monitoring with Prometheus (uncomment to enable)
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: neural-trading-prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - prometheus-data:/prometheus
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #     - '--storage.tsdb.path=/prometheus'
+  #   networks:
+  #     - trading-network
+  #   restart: unless-stopped
+
+  # Optional: Grafana for visualization (uncomment to enable)
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: neural-trading-grafana
+  #   ports:
+  #     - "3001:3000"
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
+  #   networks:
+  #     - trading-network
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - prometheus
+
+networks:
+  trading-network:
+    driver: bridge
+    name: neural-trading-net
+
+volumes:
+  prometheus-data:
+    name: neural-trading-prometheus
+  grafana-data:
+    name: neural-trading-grafana

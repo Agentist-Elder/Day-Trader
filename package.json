@@ -1,0 +1,30 @@
+{
+  "name": "neural-trading",
+  "version": "0.1.0",
+  "description": "Neural Trading System with GOAP, SAFLA, and AgentDB",
+  "dependencies": {
+    "agentdb": "1.6.1",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "lean-agentic": "0.3.2",
+    "midstreamer": "0.2.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.1.4"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testMatch": [
+      "**/*.test.js"
+    ]
+  }
+}
